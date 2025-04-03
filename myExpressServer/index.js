@@ -11,6 +11,8 @@ app.get('/', (req, res) => {
     res.send('Hello, Express!');
 });
 
+// ------------------------------------------------- MongoDB -------------------------------------------------
+
 // Get all persons or a specific person (mongo)
 app.get('/persons/:id?', async (req, res) => {
     const { id } = req.params;
@@ -143,7 +145,9 @@ app.delete('/dogs/:id', async (req, res) => {
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
-});  
+});
+
+// ------------------------------------------------- MySQL -------------------------------------------------
 
 // // Get all persons or a specific person
 // app.get('/persons/:id?', (req, res) => {
