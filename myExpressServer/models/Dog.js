@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require('../mongoDB');
 
 const dogSchema = new mongoose.Schema({
     name: { type: String, required: true },
