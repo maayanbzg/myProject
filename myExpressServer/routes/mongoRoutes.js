@@ -1,7 +1,7 @@
 import express from 'express';
 import Person from '../models/Person.js';
 import Dog from '../models/Dog.js';
-import { getCache, setCache, incrementKey } from '../utils/redisClient.js';
+import { getCache, setCache, incrementKey, addUnassignedDog, getNextUnassignedDog } from '../utils/redisClient.js';
 
 const router = express.Router();
 
@@ -65,6 +65,7 @@ router.post('/dogs', express.json(), async (req, res) => {
     const { name, person_id = null } = req.body;
     try {
         const newDog = new Dog({ name, person_id });
+        if(!person_id) await addUnassignedDog(newDog._id);
         await newDog.save();
         res.status(201).json(newDog);
     } catch (err) {
@@ -73,16 +74,16 @@ router.post('/dogs', express.json(), async (req, res) => {
 });
 
 // Assign a person to a dog
-router.put('/dogs/:id/person', express.json(), async (req, res) => {
-    const { id } = req.params;
+router.put('/dogs/person', express.json(), async (req, res) => {
     const { person_id } = req.body;
+    const id = await getNextUnassignedDog();
+    if (!id) return res.status(404).json({ message: 'No unassigned dogs available' });
+
     try {
         const dog = await Dog.findById(id);
         if (!dog) return res.status(404).json({ message: 'Dog not found' });
-
-        const person = await Person.findById(person_id);
+        const person = await Person.findById(person_id);        
         if (!person) return res.status(404).json({ message: 'Person not found' });
-
         dog.person_id = person_id;
         await dog.save();
         res.json({ message: 'Person assigned to dog', dog });

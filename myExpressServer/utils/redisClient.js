@@ -40,6 +40,11 @@ export async function getNextUnassignedDog() {
     return await redis.rpop('dogs:unassigned');
 }
 
+// Get all unassigned dogs
+export async function getAllUnassignedDogs() {
+    return await redis.lrange('dogs:unassigned', 0, -1);
+}
+
 export default {
     setCache,
     getCache,
