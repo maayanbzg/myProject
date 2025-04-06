@@ -1,4 +1,4 @@
-const mongoose = require('../mongoDB');
+import mongoose from '../mongoDB.js';
 
 const dogSchema = new mongoose.Schema({
     name: { type: String, required: true },
@@ -6,4 +6,5 @@ const dogSchema = new mongoose.Schema({
 }, { collection: 'dogs' });
 
 const Dog = mongoose.model('Dog', dogSchema);
-module.exports = Dog;
+
+export default Dog;

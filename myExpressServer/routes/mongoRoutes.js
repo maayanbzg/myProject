@@ -1,15 +1,21 @@
-const express = require('express');
+import express from 'express';
+import Person from '../models/Person.js';
+import Dog from '../models/Dog.js';
+import { getCache, setCache, incrementKey } from '../utils/redisClient.js';
+
 const router = express.Router();
-const Person = require('../models/Person');
-const Dog = require('../models/Dog');
 
 // Get all persons or a specific person
 router.get('/persons/:id?', async (req, res) => {
     const { id } = req.params;
     try {
         if (id) {
+            const cached = await getCache(`person:${id}`);
+            if (cached) return res.json(cached);
+
             const person = await Person.findById(id);
             if (!person) return res.status(404).json({ message: 'Person not found' });
+            await setCache(`person:${id}`, person, 60);
             return res.json(person);
         }
         const persons = await Person.find();
@@ -34,6 +40,7 @@ router.get('/dogs/:id?', async (req, res) => {
             if (dogs.length === 0) return res.status(404).json({ message: 'Dog not found' });
             return res.json(dogs);
         }
+        await incrementKey('stats:dogs:get');
         const dogs = await Dog.find();
         res.json(dogs);
     } catch (err) {
@@ -110,4 +117,4 @@ router.delete('/dogs/:id', async (req, res) => {
     }
 });
 
-module.exports = router;
+export default router;

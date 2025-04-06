@@ -1,4 +1,4 @@
-const mongoose = require('../mongoDB');
+import mongoose from '../mongoDB.js';
 
 const personSchema = new mongoose.Schema({
     name: { type: String, required: true, minlength: 2 },
@@ -6,4 +6,5 @@ const personSchema = new mongoose.Schema({
 }, { collection: 'persons' });
 
 const Person = mongoose.model('Person', personSchema);
-module.exports = Person;
+
+export default Person;

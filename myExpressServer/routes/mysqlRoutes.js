@@ -1,6 +1,7 @@
-const express = require('express');
+import express from 'express';
+import mysqlDB from '../mysql.js';
+
 const router = express.Router();
-const mysqlDB = require('../mysql');
 
 // Get all persons or a specific person
 router.get('/persons/:id?', (req, res) => {
@@ -73,4 +74,4 @@ router.delete('/dogs/:id', (req, res) => {
     });
 });
 
-module.exports = router;
+export default router;
