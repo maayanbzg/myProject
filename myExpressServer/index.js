@@ -10,8 +10,8 @@ app.get('/', (req, res) => {
   res.send('Hello, Express!');
 });
 
-app.use(mysqlRoutes);
-app.use(mongoRoutes);
+app.use('/mysql', mysqlRoutes);
+app.use('/mongo', mongoRoutes);
 
 app.listen(PORT, async () => {
   console.log(`Server running on http://localhost:${PORT}`);
