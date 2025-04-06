@@ -1,7 +1,7 @@
 import express from 'express';
 import mysqlRoutes from './routes/mysqlRoutes.js';
 import mongoRoutes from './routes/mongoRoutes.js';
-import redisClient from './utils/redisClient.js';
+import { getCache } from './utils/redisClient.js';
 
 const app = express();
 const PORT = 3000;
@@ -17,7 +17,7 @@ app.listen(PORT, async () => {
   console.log(`Server running on http://localhost:${PORT}`);
 
   try {
-    const count = await redisClient.redis.get('stats:dogs:get');
+    const count = await getCache('stats:dogs:get');
     console.log('Dogs was accessed', count || 0, 'times');
   } catch (err) {
     console.error('Error accessing Redis:', err);
