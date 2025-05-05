@@ -2,9 +2,14 @@ import express from 'express';
 import mysqlRoutes from './routes/mysqlRoutes.js';
 import mongoRoutes from './routes/mongoRoutes.js';
 import { getCache, getAllUnassignedDogs } from './utils/redisClient.js';
+import cors from 'cors';
 
 const app = express();
 const PORT = 3000;
+
+app.use(cors({
+  origin: 'http://localhost:3001'
+}));
 
 app.get('/', (req, res) => {
   res.send('Hello, Express!');
