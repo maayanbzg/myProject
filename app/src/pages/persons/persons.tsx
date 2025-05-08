@@ -12,11 +12,11 @@ const Persons: FC = () => {
 
     useEffect(() => {
       axios.get("http://localhost:3000/mysql/persons")
-        .then(response => {
-          setPersons(response.data);
+        .then(res => {
+          setPersons(res.data);
         })
-        .catch(error => {
-          console.error("Error fetching persons:", error);
+        .catch(err => {
+          console.error("Error fetching persons:", err);
         });
     }, []);
 
